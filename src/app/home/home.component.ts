@@ -1,13 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-
+import { Observable, Observer, Subscription, interval } from 'rxjs';
 // tslint:disable-next-line: import-blacklist
-import 'rxjs/Rx';
-// tslint:disable-next-line: import-blacklist
-import { Observer } from 'rxjs/Observer';
-// tslint:disable-next-line: import-blacklist
-import { Subscription } from 'rxjs/Rx';
-
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -18,12 +12,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   numbersObsSubcription: Subscription;
   customObsSubcription: Subscription;
 
-
-
   constructor() { }
 
   ngOnInit() {
-    const myNumbers = Observable.interval(1000);
+    const myNumbers = interval(1000)
+      .pipe(map(
+        (data: number) => {
+          return data * 2;
+        }
+      ));
     this.numbersObsSubcription = myNumbers.subscribe(
       (number: number) => {
         console.log(number);
